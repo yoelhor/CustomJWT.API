@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="irisflower.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions_CustomCert" 
+  PublicPolicyUri="http://irisflower.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions_CustomCert">
+  
+  <BasePolicy>
+    <TenantId>irisflower.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkBase_CustomCert</PolicyId>
+  </BasePolicy>
+ <BuildingBlocks>
+
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH">
+          <Metadata>
+            <Item Key="client_id">2062846193972967</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+		  <TechnicalProfile Id="login-NonInteractive">
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="cd117638-a28e-4315-963b-2645e86ed619" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="98713224-0247-49f7-8f63-e1b6ed39caf8" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+  </ClaimsProviders>
+
+    <!--UserJourneys>
+	
+	</UserJourneys-->
+
+</TrustFrameworkPolicy>

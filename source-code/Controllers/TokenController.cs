@@ -30,7 +30,7 @@ namespace CustomJWT.API.Controllers
 
             // Sample: Load the certificate with a private key (must be pfx file)
             X509SigningCredentials signingCredentials;
-            
+
             X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             certStore.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection certCollection = certStore.Certificates.Find(
@@ -40,7 +40,7 @@ namespace CustomJWT.API.Controllers
             // Get the first cert with the thumb-print
             if (certCollection.Count == 0)
             {
-                throw new Exception("Certificate not found");
+                return $"Certificate '{certThumbprint}' not found.";
             }
             else
             {
@@ -58,8 +58,8 @@ namespace CustomJWT.API.Controllers
             claims.Add(new System.Security.Claims.Claim("tid", "84d5d499-6212-4bf7-8c02-3c8a6fe4306b", System.Security.Claims.ClaimValueTypes.String, issuer));
             claims.Add(new System.Security.Claims.Claim("ver", "1.0", System.Security.Claims.ClaimValueTypes.String, issuer));
             claims.Add(new System.Security.Claims.Claim("nonce", "defaultNonce", System.Security.Claims.ClaimValueTypes.String, issuer));
-            claims.Add(new System.Security.Claims.Claim("iat", DateTime.Now.Ticks.ToString(), System.Security.Claims.ClaimValueTypes.Integer64, issuer));
-            claims.Add(new System.Security.Claims.Claim("auth_time", DateTime.Now.Ticks.ToString(), System.Security.Claims.ClaimValueTypes.Integer64, issuer));
+            claims.Add(new System.Security.Claims.Claim("iat", UnixTimeNow().ToString(), System.Security.Claims.ClaimValueTypes.Integer64, issuer));
+            claims.Add(new System.Security.Claims.Claim("auth_time", UnixTimeNow().ToString(), System.Security.Claims.ClaimValueTypes.Integer64, issuer));
 
             // Create the token
             JwtSecurityToken token = new JwtSecurityToken(
@@ -74,6 +74,12 @@ namespace CustomJWT.API.Controllers
             JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
 
             return jwtHandler.WriteToken(token);
+        }
+
+        public long UnixTimeNow()
+        {
+            var timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+            return (long)timeSpan.TotalSeconds;
         }
     }
 }
